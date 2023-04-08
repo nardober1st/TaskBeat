@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Entity
 data class Task(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true) // This will auto generate a Id for a Task
     val id: Int = 0,
     val title: String,
     val description: String

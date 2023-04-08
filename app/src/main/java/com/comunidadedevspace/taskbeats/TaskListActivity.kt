@@ -3,6 +3,9 @@ package com.comunidadedevspace.taskbeats
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
@@ -13,22 +16,36 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
 
-    private var taskList = arrayListOf(
-        Task(0, "Academia", "Treino de corrida"),
-        Task(1, "Mercado", "Comprar Arroz e Feijao"),
-        Task(2, "DevSpace", "Gravar video sobre cores no taskBeats"),
-        Task(3, "Juca", "Sair para passear com o Juquinha")
-    )
+//    private var taskList = arrayListOf(
+//        Task(0, "Academia", "Treino de corrida"),
+//        Task(1, "Mercado", "Comprar Arroz e Feijao"),
+//        Task(2, "DevSpace", "Gravar video sobre cores no taskBeats"),
+//        Task(3, "Juca", "Sair para passear com o Juquinha")
+//    )
 
     private lateinit var containerContent: LinearLayout
 
     // adapter
-    private val adapter: TaskListAdapter = TaskListAdapter(::onListItemClicked)
+    private val adapter: TaskListAdapter by lazy {
+        TaskListAdapter(::onListItemClicked)
+    }
+
+    private val dataBase by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            AppDataBase::class.java, "taskbeats-database"
+        ).build()
+    }
+
+    private val dao by lazy {
+        dataBase.taskDao()
+    }
 
     private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -40,52 +57,57 @@ class MainActivity : AppCompatActivity() {
             val task: Task = taskAction.task
 
             if (taskAction.actionType == ActionType.DELETE.name) {
-                val newList = arrayListOf<Task>()
-                    .apply {
-                        addAll(taskList)
-                    }
+                deleteById(task.id)
 
-                // removendo item da lista
-                newList.remove(task)
-                showMessage(containerContent, "${task.title} was deleted from your task list!")
-
-                if (newList.size == 0) {
-                    containerContent.visibility = View.VISIBLE
-                }
-
-                // Atualizar o adapter
-                adapter.submitList(newList)
-                taskList = newList
+//                val newList = arrayListOf<Task>()
+//                    .apply {
+//                        addAll(taskList)
+//                    }
+//
+//                // removendo item da lista
+//                newList.remove(task)
+//                showMessage(containerContent, "${task.title} was deleted from your task list!")
+//
+//
+//                // Atualizar o adapter
+//                adapter.submitList(newList)
+//                taskList = newList
 
             } else if (taskAction.actionType == ActionType.CREATE.name) {
-                val newList = arrayListOf<Task>()
-                    .apply {
-                        addAll(taskList)
-                    }
-                // adicionando item da lista
-                newList.add(task)
-                showMessage(containerContent, "${task.title} was added to your task list!")
+                insertIntoDataBase(task)
 
-                // atualizar o adapter
-                adapter.submitList(newList)
-                taskList = newList
+//                val newList = arrayListOf<Task>()
+//                    .apply {
+//                        addAll(taskList)
+//                    }
+//                // adicionando item da lista
+//                newList.add(task)
+//                showMessage(containerContent, "${task.title} was added to your task list!")
+//
+//                // atualizar o adapter
+//                adapter.submitList(newList)
+//                taskList = newList
 
-            }
-            else if (taskAction.actionType == ActionType.UPDATE.name) {
+            } else if (taskAction.actionType == ActionType.UPDATE.name) {
+                updateIntoDataBase(task)
 
-                val tempEmptyList = arrayListOf<Task>()
-                taskList.forEach {
-                    if (it.id == task.id) {
-                        val newItem = Task(it.id, task.title, task.description)
-                        tempEmptyList.add(newItem)
-                    } else {
-                        tempEmptyList.add(it)
-                    }
-                }
+//                val tempEmptyList = arrayListOf<Task>()
+//                taskList.forEach {
+//                    if (it.id == task.id) {
+//                        val newItem = Task(it.id, task.title, task.description)
+//                        tempEmptyList.add(newItem)
+//                    } else {
+//                        tempEmptyList.add(it)
+//                    }
+//                }
 
-                showMessage(containerContent, "${task.title} was updated")
-                adapter.submitList(tempEmptyList)
-                taskList = tempEmptyList
+//                if (newList.size == 0) {  Moved to private fun listFromDataBase() {
+//                    containerContent.visibility = View.VISIBLE
+//                }
+//
+//                showMessage(containerContent, "${task.title} was updated")
+//                adapter.submitList(tempEmptyList)
+//                taskList = tempEmptyList
             }
         }
     }
@@ -93,18 +115,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
-        val dataBase = Room.databaseBuilder(
-            applicationContext,
-            AppDataBase::class.java, "taskbeats-database"
-        ).build()
+        // val task = Task(title = "Academia", description = "Treino de corrida") // No need to insert 'ID' because it will be auto generated by a @PrimaryKey
 
-        val dao = dataBase.taskDao()
-        val task = Task(title = "Academia", description = "Treino de corrida")
-
-        CoroutineScope(IO).launch {
-            dao.insert(task)
-        }
+        listFromDataBase()
 
 //        passar a lista pra cima, fora desse scope
 //        val taskList = listOf(
@@ -113,8 +128,6 @@ class MainActivity : AppCompatActivity() {
 //        )
 
         containerContent = findViewById(R.id.container_content)
-
-        adapter.submitList(taskList)
 
         // RecyclerView
         val rvTasks: RecyclerView = findViewById(R.id.rv_task_list)
@@ -131,6 +144,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun insertIntoDataBase(task: Task) {
+        CoroutineScope(IO).launch {
+            dao.insert(task)
+            listFromDataBase()
+        }
+    }
+
+    private fun updateIntoDataBase(task: Task) {
+        CoroutineScope(IO).launch {
+            dao.update(task)
+            listFromDataBase()
+        }
+    }
+
+    private fun deleteAll() {
+        CoroutineScope(IO).launch {
+            dao.deleteAll()
+            listFromDataBase()
+        }
+    }
+
+    private fun deleteById(id: Int) {
+        CoroutineScope(IO).launch {
+            dao.deleteById(id)
+            listFromDataBase()
+        }
+    }
+
+    private fun listFromDataBase() {
+        CoroutineScope(IO).launch {
+            val myDataBaseList: List<Task> = dao.getAll()
+            adapter.submitList(myDataBaseList)
+
+//            CoroutineScope(Main).launch {
+//                if (myDataBaseList.isEmpty()) {
+//                    containerContent.visibility = View.VISIBLE
+//                } else {
+//                    containerContent.visibility = View.GONE
+//                }
+//            }
+        }
+    }
+
     private fun showMessage(view: View, message: String) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
             .setAction("Action", null)
@@ -144,6 +200,23 @@ class MainActivity : AppCompatActivity() {
     private fun openTaskListDetail(task: Task? = null) {
         val intent = TaskDetailActivity.start(this, task)
         startForResult.launch(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_task_list, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_all_task -> {
+                // Deletar todas as tarefas
+                deleteAll()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
 

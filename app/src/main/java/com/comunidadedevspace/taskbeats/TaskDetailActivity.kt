@@ -22,8 +22,7 @@ class TaskDetailActivity : AppCompatActivity() {
         private const val TASK_DETAIL_EXTRA = "task.extra.detail"
 
         fun start(context: Context, task: Task?): Intent {
-            val intent = Intent(context, TaskDetailActivity::class.java)
-                .apply {
+            val intent = Intent(context, TaskDetailActivity::class.java).apply {
                     putExtra(TASK_DETAIL_EXTRA, task)
                 }
             return intent
@@ -69,11 +68,9 @@ class TaskDetailActivity : AppCompatActivity() {
         // titleDetailTextview.text = task?.title ?: "Adicione uma tarefa"
     }
 
+    // Function that can add or update a contact
     private fun addOrUpdateTask(
-        id: Int,
-        title: String,
-        description: String,
-        actionType: ActionType
+        id: Int, title: String, description: String, actionType: ActionType
     ) {
         val task = Task(id, title, description)
         returnAction(task, actionType)
@@ -103,18 +100,15 @@ class TaskDetailActivity : AppCompatActivity() {
 
     // Return Action to Main Screen
     private fun returnAction(task: Task, actionType: ActionType) {
-        val intent = Intent()
-            .apply {
-                val taskAction = TaskAction(task, actionType.name)
-                putExtra(TASK_ACTION_RESULT, taskAction)
-            }
+        val intent = Intent().apply {
+            val taskAction = TaskAction(task, actionType.name)
+            putExtra(TASK_ACTION_RESULT, taskAction)
+        }
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun showMessage(view: View, message: String) {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-            .setAction("Action", null)
-            .show()
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null).show()
     }
 }
