@@ -56,58 +56,56 @@ class MainActivity : AppCompatActivity() {
             val taskAction = data?.getSerializableExtra(TASK_ACTION_RESULT) as TaskAction
             val task: Task = taskAction.task
 
-            if (taskAction.actionType == ActionType.DELETE.name) {
-                deleteById(task.id)
+            when (taskAction.actionType) {
+                ActionType.DELETE.name -> deleteById(task.id)
 
-//                val newList = arrayListOf<Task>()
-//                    .apply {
-//                        addAll(taskList)
-//                    }
-//
-//                // removendo item da lista
-//                newList.remove(task)
-//                showMessage(containerContent, "${task.title} was deleted from your task list!")
-//
-//
-//                // Atualizar o adapter
-//                adapter.submitList(newList)
-//                taskList = newList
+        //                val newList = arrayListOf<Task>()
+        //                    .apply {
+        //                        addAll(taskList)
+        //                    }
+        //
+        //                // removendo item da lista
+        //                newList.remove(task)
+        //                showMessage(containerContent, "${task.title} was deleted from your task list!")
+        //
+        //
+        //                // Atualizar o adapter
+        //                adapter.submitList(newList)
+        //                taskList = newList
 
-            } else if (taskAction.actionType == ActionType.CREATE.name) {
-                insertIntoDataBase(task)
+                ActionType.CREATE.name -> insertIntoDataBase(task)
 
-//                val newList = arrayListOf<Task>()
-//                    .apply {
-//                        addAll(taskList)
-//                    }
-//                // adicionando item da lista
-//                newList.add(task)
-//                showMessage(containerContent, "${task.title} was added to your task list!")
-//
-//                // atualizar o adapter
-//                adapter.submitList(newList)
-//                taskList = newList
+        //                val newList = arrayListOf<Task>()
+        //                    .apply {
+        //                        addAll(taskList)
+        //                    }
+        //                // adicionando item da lista
+        //                newList.add(task)
+        //                showMessage(containerContent, "${task.title} was added to your task list!")
+        //
+        //                // atualizar o adapter
+        //                adapter.submitList(newList)
+        //                taskList = newList
 
-            } else if (taskAction.actionType == ActionType.UPDATE.name) {
-                updateIntoDataBase(task)
+                ActionType.UPDATE.name -> updateIntoDataBase(task)
 
-//                val tempEmptyList = arrayListOf<Task>()
-//                taskList.forEach {
-//                    if (it.id == task.id) {
-//                        val newItem = Task(it.id, task.title, task.description)
-//                        tempEmptyList.add(newItem)
-//                    } else {
-//                        tempEmptyList.add(it)
-//                    }
-//                }
+        //                val tempEmptyList = arrayListOf<Task>()
+        //                taskList.forEach {
+        //                    if (it.id == task.id) {
+        //                        val newItem = Task(it.id, task.title, task.description)
+        //                        tempEmptyList.add(newItem)
+        //                    } else {
+        //                        tempEmptyList.add(it)
+        //                    }
+        //                }
 
-//                if (newList.size == 0) {  Moved to private fun listFromDataBase() {
-//                    containerContent.visibility = View.VISIBLE
-//                }
-//
-//                showMessage(containerContent, "${task.title} was updated")
-//                adapter.submitList(tempEmptyList)
-//                taskList = tempEmptyList
+        //                if (newList.size == 0) {  Moved to private fun listFromDataBase() {
+        //                    containerContent.visibility = View.VISIBLE
+        //                }
+        //
+        //                showMessage(containerContent, "${task.title} was updated")
+        //                adapter.submitList(tempEmptyList)
+        //                taskList = tempEmptyList
             }
         }
     }
