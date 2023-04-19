@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".TaskBeatsApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,9 +16,9 @@
         <activity
             android:name=".presentation.TaskDetailActivity"
             android:exported="false"
-            android:parentActivityName=".presentation.MainActivity" />
+            android:parentActivityName=".presentation.TaskListActivity" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.TaskListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
