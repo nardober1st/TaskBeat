@@ -27,6 +27,8 @@ class TaskListActivity : AppCompatActivity() {
 //        Task(3, "Juca", "Sair para passear com o Juquinha")
 //    )
 
+    // Some changes
+
     private lateinit var containerContent: LinearLayout
 
     // adapter

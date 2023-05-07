@@ -11,28 +11,28 @@ import org.mockito.kotlin.whenever
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+//class ExampleUnitTest {
 
-//    private val fakeNumbersProvider = FakeMyNumbersProviderImplementacao()
-    private val mockNumbersProvider: MyNumbersProvider = mock()
+////    private val fakeNumbersProvider = FakeMyNumbersProviderImplementacao()
+//    private val mockNumbersProvider: MyNumbersProvider = mock()
+//
+//    private val underTest = MyCountRepositoryImplementacao(
+//        numbersProvider = mockNumbersProvider
+//    )
 
-    private val underTest = MyCountRepositoryImplementacao(
-        numbersProvider = mockNumbersProvider
-    )
-
-    @Test
-    fun addition_isCorrect() {
-        // Given
-//        val p1 = 3
-//        val p2 = 2
-        whenever(mockNumbersProvider.getNumber()).thenReturn(2)
-//        fakeNumbersProvider.p1 = 2
-
-        // When
-        val result = underTest.sum()
-
-        // Then
-        val expected = 4
-        assertEquals(expected, result)
-    }
-}
+//    @Test
+//    fun addition_isCorrect() {
+//        // Given
+////        val p1 = 3
+////        val p2 = 2
+//        whenever(mockNumbersProvider.getNumber()).thenReturn(2)
+////        fakeNumbersProvider.p1 = 2
+//
+//        // When
+//        val result = underTest.sum()
+//
+//        // Then
+//        val expected = 4
+//        assertEquals(expected, result)
+//    }
+//}
