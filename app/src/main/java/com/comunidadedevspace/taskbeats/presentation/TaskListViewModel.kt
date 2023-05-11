@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.comunidadedevspace.taskbeats.TaskBeatsApplication
 import com.comunidadedevspace.taskbeats.data.Task
 import com.comunidadedevspace.taskbeats.data.TaskDAO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // Here we are extending/inheriting the/from 'ViewModel()' class in our TaskListViewModel class
 // Our TaskListViewModel will depend on the taskDAO so we can have access to the functions in it
-class TaskListViewModel(private val taskDAO: TaskDAO) : ViewModel() {
+class TaskListViewModel(
+    private val taskDAO: TaskDAO,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
     val taskListLiveData: LiveData<List<Task>> = taskDAO.getAll()
 
@@ -26,7 +30,8 @@ class TaskListViewModel(private val taskDAO: TaskDAO) : ViewModel() {
     }
 
     private fun deleteById(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+//        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             taskDAO.deleteById(id)
         }
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -36,7 +41,8 @@ class TaskListViewModel(private val taskDAO: TaskDAO) : ViewModel() {
     }
 
     private fun insertIntoDataBase(task: Task) {
-        viewModelScope.launch(Dispatchers.IO) {
+//        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             taskDAO.insert(task)
         }
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -46,7 +52,8 @@ class TaskListViewModel(private val taskDAO: TaskDAO) : ViewModel() {
     }
 
     private fun updateIntoDataBase(task: Task) {
-        viewModelScope.launch(Dispatchers.IO) {
+//        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             taskDAO.update(task)
         }
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -56,7 +63,8 @@ class TaskListViewModel(private val taskDAO: TaskDAO) : ViewModel() {
     }
 
     private fun deleteAll() {
-        viewModelScope.launch(Dispatchers.IO) {
+//        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             taskDAO.deleteAll()
 //            listFromDataBase()
         }
