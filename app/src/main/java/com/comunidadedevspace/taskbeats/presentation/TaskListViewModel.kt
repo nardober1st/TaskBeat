@@ -3,17 +3,13 @@ package com.comunidadedevspace.taskbeats.presentation
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.comunidadedevspace.taskbeats.TaskBeatsApplication
-import com.comunidadedevspace.taskbeats.data.Task
-import com.comunidadedevspace.taskbeats.data.TaskDAO
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.comunidadedevspace.taskbeats.data.local.Task
+import com.comunidadedevspace.taskbeats.data.local.TaskDAO
 
 // Here we are extending/inheriting the/from 'ViewModel()' class in our TaskListViewModel class
 // Our TaskListViewModel will depend on the taskDAO so we can have access to the functions in it
-class TaskListViewModel(taskDAO: TaskDAO) : ViewModel() {
+class TaskListViewModel(taskDAO : TaskDAO) : ViewModel() {
 
     val taskListLiveData: LiveData<List<Task>> = taskDAO.getAll()
 

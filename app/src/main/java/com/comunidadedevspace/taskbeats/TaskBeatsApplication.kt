@@ -2,7 +2,7 @@ package com.comunidadedevspace.taskbeats
 
 import android.app.Application
 import androidx.room.Room
-import com.comunidadedevspace.taskbeats.data.AppDataBase
+import com.comunidadedevspace.taskbeats.data.local.AppDataBase
 
 // Here we are extending/inheriting the/from 'Application()' class in our TaskBeatsApplication class
 class TaskBeatsApplication : Application() {

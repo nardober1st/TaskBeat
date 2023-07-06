@@ -17,7 +17,7 @@
 //import androidx.lifecycle.Observer
 //import androidx.recyclerview.widget.RecyclerView
 //import com.comunidadedevspace.taskbeats.R
-//import com.comunidadedevspace.taskbeats.data.Task
+//import com.comunidadedevspace.taskbeats.data.local.Task
 //import com.google.android.material.floatingactionbutton.FloatingActionButton
 //import com.google.android.material.snackbar.Snackbar
 //import java.io.Serializable

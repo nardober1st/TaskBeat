@@ -1,4 +1,4 @@
-package com.comunidadedevspace.taskbeats.data
+package com.comunidadedevspace.taskbeats.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,7 +11,7 @@ import androidx.room.Update
 interface TaskDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE) // This will replace an existing task that has the same ID of the new one
-    fun insert(task: Task)
+    suspend fun insert(task: Task)
 
     // Before was: fun getAll(): List<Task>
     // Here we created the LiveData
@@ -20,13 +20,13 @@ interface TaskDAO {
 
     // Update precisa encontrar a tarefa que queremos alterar
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(task: Task)
+    suspend fun update(task: Task)
 
     // Deletando todos
     @Query("DELETE from task")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     // Deletando pelo ID
     @Query("DELETE from task WHERE id =:id")
-    fun deleteById(id: Int)
+    suspend fun deleteById(id: Int)
 }

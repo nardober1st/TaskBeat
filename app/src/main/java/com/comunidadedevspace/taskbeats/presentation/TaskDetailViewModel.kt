@@ -5,15 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.comunidadedevspace.taskbeats.TaskBeatsApplication
-import com.comunidadedevspace.taskbeats.data.Task
-import com.comunidadedevspace.taskbeats.data.TaskDAO
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.comunidadedevspace.taskbeats.data.local.Task
+import com.comunidadedevspace.taskbeats.data.local.TaskDAO
 import kotlinx.coroutines.launch
 
 class TaskDetailViewModel(
     private val taskDAO: TaskDAO,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     fun execute(taskAction: TaskAction) {
@@ -26,19 +23,19 @@ class TaskDetailViewModel(
     }
 
     private fun deleteById(id: Int) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             taskDAO.deleteById(id)
         }
     }
 
     private fun insertIntoDataBase(task: Task) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             taskDAO.insert(task)
         }
     }
 
     private fun updateIntoDataBase(task: Task) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             taskDAO.update(task)
         }
 

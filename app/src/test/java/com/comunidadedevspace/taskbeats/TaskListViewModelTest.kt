@@ -1,6 +1,6 @@
 package com.comunidadedevspace.taskbeats
 
-import com.comunidadedevspace.taskbeats.data.TaskDAO
+import com.comunidadedevspace.taskbeats.data.local.TaskDAO
 import com.comunidadedevspace.taskbeats.presentation.TaskListViewModel
 import org.mockito.kotlin.mock
 
